@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Cars</h1>
+<div class="row">
+    {% for car in cars %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
+                <p class="card-text">Year: {{ car.year }}</p>
+                <p class="card-text">{{ car.description|truncatewords:30 }}</p>
+                <a href="{% url 'car-detail' car.pk %}" class="btn btn-primary">View Details</a>
+                {% if user == car.owner %}
+                <a href="{% url 'car-update' car.pk %}" class="btn btn-secondary">Edit</a>
+                <a href="{% url 'car-delete' car.pk %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

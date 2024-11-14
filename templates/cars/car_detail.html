@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1>{{ car.make }} {{ car.model }}</h1>
+        <p>Year: {{ car.year }}</p>
+        <p>{{ car.description }}</p>
+        <p>Owner: {{ car.owner }}</p>
+        
+        {% if user == car.owner %}
+        <a href="{% url 'car-update' car.pk %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'car-delete' car.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-4">
+    <h3>Comments</h3>
+    {% for comment in car.comments.all %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <p>{{ comment.content }}</p>
+            <small>By {{ comment.author }} on {{ comment.created_at }}</small>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <h4>Add Comment</h4>
+            <form method="post" action="{% url 'car-comments' car.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
